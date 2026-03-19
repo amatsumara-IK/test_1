@@ -1,0 +1,48 @@
+proxies:
+  - name: "Нидерланды-VLESS"
+    type: vless
+    server: 89.125.82.201
+    port: 443
+    uuid: 7f7bde64-e435-406f-a3ce-e9f43a84cc84
+    network: xhttp
+    tls: true
+    reality-opts:
+      public-key: Q89TCxRNDVSIRi2LxAaj9VPRBtoZThR6cLgUuz6xXz0
+      short-id: ef2bd31e
+    servername: www.samsung.com
+    client-fingerprint: chrome
+    xhttp-opts:
+      path: "/mlashzq"
+      mode: auto
+
+  - name: "Нидерланды-HY2"
+    type: hysteria2
+    server: 89.125.82.201
+    port: 1935
+    password: testrakom.sxk46KytIPXTJ5dpNBW5Vg
+    sni: sub1.netrelay-sync.online
+    skip-cert-verify: false
+
+  - name: "Латвия-VLESS"
+    type: vless
+    server: 217.177.34.43
+    port: 443
+    uuid: 8afba2f1-5082-48ad-a9ed-c020982c6bf5
+    network: xhttp
+    tls: true
+    reality-opts:
+      public-key: mvfSxBCg6qC3PtFEibpX31qSWLegk0la-mIw64xVZE4
+      short-id: 590971e1
+    servername: www.samsung.com
+    client-fingerprint: chrome
+    xhttp-opts:
+      path: "/jaz1lhasd2"
+      mode: auto
+
+  - name: "Латвия-HY2"
+    type: hysteria2
+    server: 217.177.34.43
+    port: 443
+    password: testrakom.jPVnSZDoapKfXuBL_O0zZw
+    sni: sub2.netrelay-sync.online
+    skip-cert-verify: false
