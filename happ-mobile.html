@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Настройка HAPP на телефоне — Aether VPN</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0e12;
+    --surface: #16161d;
+    --surface2: #1e1e28;
+    --border: #2a2a38;
+    --accent: #7c6af7;
+    --accent2: #4fc3f7;
+    --text: #e8e8f0;
+    --muted: #888899;
+    --success: #4ade80;
+    --code-bg: #12121a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Onest', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* Subtle grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(124,106,247,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124,106,247,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  /* Header */
+  .header {
+    margin-bottom: 48px;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(124,106,247,0.12);
+    border: 1px solid rgba(124,106,247,0.25);
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 100px;
+    margin-bottom: 20px;
+  }
+
+  .badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--accent);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  h1 {
+    font-size: clamp(26px, 5vw, 36px);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin-bottom: 12px;
+    color: #fff;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 15px;
+  }
+
+  .platform-tags {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  /* Steps */
+  .step {
+    margin-bottom: 40px;
+    opacity: 0;
+    transform: translateY(16px);
+    animation: fadeUp 0.5s ease forwards;
+  }
+
+  .step:nth-child(1) { animation-delay: 0.1s; }
+  .step:nth-child(2) { animation-delay: 0.2s; }
+  .step:nth-child(3) { animation-delay: 0.3s; }
+  .step:nth-child(4) { animation-delay: 0.4s; }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+
+  .step-num {
+    flex-shrink: 0;
+    width: 32px; height: 32px;
+    background: linear-gradient(135deg, var(--accent), #5b4fcf);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(124,106,247,0.3);
+  }
+
+  .step-header h2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: -0.01em;
+  }
+
+  .step-body {
+    padding-left: 46px;
+  }
+
+  /* Download buttons */
+  .dl-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+
+  .dl-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--text);
+  }
+
+  .dl-btn:hover {
+    background: var(--surface);
+    border-color: var(--accent);
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(124,106,247,0.2);
+  }
+
+  .dl-btn svg { flex-shrink: 0; }
+
+  /* List items */
+  ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  li::before {
+    content: '→';
+    color: var(--accent);
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-size: 13px;
+  }
+
+  p { margin-bottom: 12px; font-size: 15px; }
+
+  /* Images */
+  .img-wrap {
+    margin: 16px 0;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    display: inline-block;
+    max-width: 100%;
+  }
+
+  .img-wrap img {
+    display: block;
+    max-width: 100%;
+    max-height: 480px;
+    width: auto;
+    height: auto;
+  }
+
+  .img-group {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 16px 0;
+  }
+
+  .img-group .img-wrap {
+    flex: 1;
+    min-width: 160px;
+  }
+
+  .img-group .img-wrap img {
+    width: 100%;
+    height: auto;
+  }
+
+  /* Code block */
+  .code-block {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    color: var(--accent2);
+    word-break: break-all;
+    overflow-x: auto;
+    margin: 12px 0;
+    position: relative;
+  }
+
+  .copy-btn {
+    position: absolute;
+    top: 10px; right: 10px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 11px;
+    font-family: 'Onest', sans-serif;
+    padding: 4px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .copy-btn:hover { color: #fff; border-color: var(--accent); }
+  .copy-btn.copied { color: var(--success); border-color: var(--success); }
+
+  /* Import link */
+  .import-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 18px;
+    background: linear-gradient(135deg, rgba(124,106,247,0.15), rgba(79,195,247,0.1));
+    border: 1px solid rgba(124,106,247,0.35);
+    border-radius: 10px;
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    margin: 12px 0;
+    transition: all 0.2s;
+  }
+
+  .import-link:hover {
+    background: linear-gradient(135deg, rgba(124,106,247,0.25), rgba(79,195,247,0.15));
+    transform: translateY(-1px);
+  }
+
+  /* Note / blockquote */
+  .note {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent2);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 14px;
+    color: var(--muted);
+    margin: 16px 0;
+  }
+
+  .note strong { color: var(--text); }
+
+  /* Result block */
+  .result {
+    background: linear-gradient(135deg, rgba(74,222,128,0.06), rgba(124,106,247,0.06));
+    border: 1px solid rgba(74,222,128,0.2);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+  }
+
+  .result-title {
+    font-weight: 600;
+    color: var(--success);
+    font-size: 15px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .result ul {
+    background: none;
+    border: none;
+    padding: 0;
+    gap: 6px;
+  }
+
+  .result li {
+    background: rgba(255,255,255,0.03);
+    border: none;
+    font-size: 14px;
+  }
+
+  /* Divider */
+  hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 40px 0;
+  }
+
+  /* Support block */
+  .support {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 16px;
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  .support a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .support a:hover { text-decoration: underline; }
+
+  strong { color: var(--text); font-weight: 500; }
+
+  @media (max-width: 480px) {
+    .wrap { padding: 32px 16px 60px; }
+    .step-body { padding-left: 0; }
+    .step-header { align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header">
+    <div class="badge">Aether VPN</div>
+    <h1>Настройка HAPP<br>на телефоне</h1>
+    <p class="subtitle">Пошаговая инструкция по установке и настройке</p>
+    <div class="platform-tags">
+      <span class="tag">📱 iOS</span>
+      <span class="tag">🤖 Android</span>
+    </div>
+  </div>
+
+  <div class="steps">
+
+    <!-- Step 1 -->
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">1</div>
+        <h2>Устанавливаем приложение</h2>
+      </div>
+      <div class="step-body">
+        <div class="dl-row">
+          <a class="dl-btn" href="https://apps.apple.com/ru/app/happ-proxy-utility-plus/id6746188973" target="_blank">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+            Скачать для iOS
+          </a>
+          <a class="dl-btn" href="https://play.google.com/store/apps/details?id=com.happproxy" target="_blank">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M3.18 23.76c.3.17.63.24.97.21l12.44-7.19-2.81-2.81-10.6 9.79zm-1.58-20.35C1.32 3.73 1.1 4.1 1.1 4.57v14.86c0 .48.22.85.5 1.16l.08.07 8.32-8.32v-.19L1.6 3.41zm14.32 9.42l-2.77-2.77-8.2-4.74L16 9.16l-3.08 3.67 3.08-3.67zM20.18 8.4l-3.52-2.03-3.08 3.67 3.08 3.67 3.54-2.04c1.01-.58 1.01-1.53-.02-2.27z"/></svg>
+            Скачать для Android
+          </a>
+        </div>
+        <div class="img-wrap">
+          <img src="https://img4.teletype.in/files/3c/95/3c95ec37-c102-4855-966b-16969adbdd41.png" alt="HAPP App Store">
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">2</div>
+        <h2>Добавляем подписку</h2>
+      </div>
+      <div class="step-body">
+        <ul>
+          <li>Получите ссылку на подписку в боте <strong>@Aether_net_bot</strong></li>
+          <li>Скопируйте подписку в буфер обмена</li>
+          <li>Откройте приложение <strong>HAPP</strong> и нажмите <strong>«Из буфера»</strong> в нижней части экрана, либо <strong>«+»</strong> в правом верхнем углу → <strong>«Вставить из буфера обмена»</strong></li>
+        </ul>
+        <div class="img-group">
+          <div class="img-wrap">
+            <img src="https://img1.teletype.in/files/0a/78/0a7853da-23ed-4e69-8a23-fcc1ae9d4345.jpeg" alt="Добавление подписки">
+          </div>
+          <div class="img-wrap">
+            <img src="https://img1.teletype.in/files/ce/40/ce40700a-a42a-406d-b43d-7c70457c14b4.jpeg" alt="Список серверов">
+          </div>
+        </div>
+        <p>После этого у вас появится список серверов на главном экране.</p>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">3</div>
+        <h2>Настройка приложения</h2>
+      </div>
+      <div class="step-body">
+        <ul>
+          <li>Нажмите на значок <strong>⚙️ (Настройки)</strong> на главном экране</li>
+          <li>В пункте <strong>«Предпочитаемый тип IP»</strong> выберите <strong>«IPv4»</strong></li>
+        </ul>
+        <div class="img-wrap">
+          <img src="https://img1.teletype.in/files/83/32/8332eec7-05a7-4141-8b78-25d22e410b90.jpeg" alt="Настройки IPv4">
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">4</div>
+        <h2>Настройка маршрутизации</h2>
+      </div>
+      <div class="step-body">
+        <p>Чтобы VPN не влиял на российские сайты и приложения (RU, VK, банки и т.д.), добавьте готовые правила маршрутизации.</p>
+        <ul>
+          <li>Нажмите на пункт <strong>«Маршрутизация»</strong> в настройках приложения</li>
+        </ul>
+        <div class="img-wrap">
+          <img src="https://img3.teletype.in/files/e8/c2/e8c2ae59-80a6-4340-9ffc-f0a75dab25db.png" alt="Маршрутизация">
+        </div>
+
+        <p>Нажмите на кнопку ниже, чтобы автоматически добавить профиль маршрутизации:</p>
+
+        <a class="import-link" href="happ://routing/onadd/eyJOYW1lIjoiUnVzc2lh8J+Ht/Cfh7oiLCJHbG9iYWxQcm94eSI6dHJ1ZSwiUm91dGVPcmRlciI6ImRpcmVjdC1ibG9jay1wcm94eSIsIlJlbW90ZUROU1R5cGUiOiJEb1UiLCJSZW1vdGVETlNEb21haW4iOiJodHRwczovL2Nsb3VkZmxhcmUtZG5zLmNvbS9kbnMtcXVlcnkiLCJSZW1vdGVETlNJUCI6IjEuMS4xLjEiLCJEb21lc3RpY0ROU1R5cGUiOiJEb1UiLCJEb21lc3RpY0ROU0RvbWFpbiI6Imh0dHBzOi8vZG5zLmdvb2dsZS9kbnMtcXVlcnkiLCJEb21lc3RpY0ROU0lQIjoiNzcuODguOC44IiwiR2VvaXB1cmwiOiJodHRwczovL2dpdGh1Yi5jb20vTG95YWxzb2xkaWVyL3YycmF5LXJ1bGVzLWRhdC9yZWxlYXNlcy9sYXRlc3QvZG93bmxvYWQvZ2VvaXAuZGF0IiwiR2Vvc2l0ZXVybCI6Imh0dHBzOi8vZ2l0aHViLmNvbS9Mb3lhbHNvbGRpZXIvdjJyYXktcnVsZXMtZGF0L3JlbGVhc2VzL2xhdGVzdC9kb3dubG9hZC9nZW9zaXRlLmRhdCIsIkxhc3RVcGRhdGVkIjoiMTc3NDA0MjMzMyIsIkRuc0hvc3RzIjp7fSwiRGlyZWN0U2l0ZXMiOlsiZ2Vvc2l0ZTpwcml2YXRlIiwiZ2Vvc2l0ZTpjYXRlZ29yeS1ydSIsImdlb3NpdGU6Y2F0ZWdvcnktZ292LXJ1IiwiZ2Vvc2l0ZTpjYXRlZ29yeS1iYW5rLXJ1IiwiZ2Vvc2l0ZTpjYXRlZ29yeS1tZWRpYS1ydSIsImdlb3NpdGU6Y2F0ZWdvcnktcmV0YWlsLXJ1IiwiZ2Vvc2l0ZTpjYXRlZ29yeS1lY29tbWVyY2UtcnUiLCJnZW9zaXRlOmNhdGVnb3J5LWVudGVydGFpbm1lbnQtcnUiLCJnZW9zaXRlOmNhdGVnb3J5LXRyYXZlbC1ydSIsImdlb3NpdGU6eWFuZGV4IiwiZ2Vvc2l0ZTp2ayIsImdlb3NpdGU6bWFpbHJ1IiwiZ2Vvc2l0ZTptYWlscnUtZ3JvdXAiLCJkb21haW46d2JzdGF0aWMubmV0IiwiZG9tYWluOndiY2RuLnJ1IiwiZG9tYWluOmJpdHJpeC5pbmZvIl0sIkRpcmVjdElwIjpbImdlb2lwOnByaXZhdGUiLCJnZW9pcDpydSJdLCJQcm94eVNpdGVzIjpbXSwiUHJveHlJcCI6W10sIkJsb2NrU2l0ZXMiOltdLCJCbG9ja0lwIjpbXSwiRG9tYWluU3RyYXRlZ3kiOiJJUElmTm9uTWF0Y2giLCJGYWtlRE5TIjpmYWxzZSwiVXNlQ2h1bmtGaWxlcyI6dHJ1ZX0=">
+          ✦ Добавить профиль «Russia»
+        </a>
+
+        <p style="margin-top:16px">Или скопируйте ссылку вручную и нажмите <strong>три точки</strong> → <strong>«Импорт профиля»</strong>:</p>
+
+        <div class="code-block" id="routing-code">happ://routing/onadd/eyJOYW1lIjoiUnVzc2lh8J+Ht/Cfh7oiLCJHbG9iYWxQcm94eSI6dHJ1ZSwiUm91dGVPcmRlciI6ImRpcmVjdC1ibG9jay1wcm94eSIsIlJlbW90ZUROU1R5cGUiOiJEb1UiLCJSZW1vdGVETlNEb21haW4iOiJodHRwczovL2Nsb3VkZmxhcmUtZG5zLmNvbS9kbnMtcXVlcnkiLCJSZW1vdGVETlNJUCI6IjEuMS4xLjEiLCJEb21lc3RpY0ROU1R5cGUiOiJEb1UiLCJEb21lc3RpY0ROU0RvbWFpbiI6Imh0dHBzOi8vZG5zLmdvb2dsZS9kbnMtcXVlcnkiLCJEb21lc3RpY0ROU0lQIjoiNzcuODguOC44IiwiR2VvaXB1cmwiOiJodHRwczovL2dpdGh1Yi5jb20vTG95YWxzb2xkaWVyL3YycmF5LXJ1bGVzLWRhdC9yZWxlYXNlcy9sYXRlc3QvZG93bmxvYWQvZ2VvaXAuZGF0IiwiR2Vvc2l0ZXVybCI6Imh0dHBzOi8vZ2l0aHViLmNvbS9Mb3lhbHNvbGRpZXIvdjJyYXktcnVsZXMtZGF0L3JlbGVhc2VzL2xhdGVzdC9kb3dubG9hZC9nZW9zaXRlLmRhdCIsIkxhc3RVcGRhdGVkIjoiMTc3NDA0MjMzMyIsIkRuc0hvc3RzIjp7fSwiRGlyZWN0U2l0ZXMiOlsiZ2Vvc2l0ZTpwcml2YXRlIiwiZ2Vvc2l0ZTpjYXRlZ29yeS1ydSIsImdlb3NpdGU6Y2F0ZWdvcnktZ292LXJ1IiwiZ2Vvc2l0ZTpjYXRlZ29yeS1iYW5rLXJ1IiwiZ2Vvc2l0ZTpjYXRlZ29yeS1tZWRpYS1ydSIsImdlb3NpdGU6Y2F0ZWdvcnktcmV0YWlsLXJ1IiwiZ2Vvc2l0ZTpjYXRlZ29yeS1lY29tbWVyY2UtcnUiLCJnZW9zaXRlOmNhdGVnb3J5LWVudGVydGFpbm1lbnQtcnUiLCJnZW9zaXRlOmNhdGVnb3J5LXRyYXZlbC1ydSIsImdlb3NpdGU6eWFuZGV4IiwiZ2Vvc2l0ZTp2ayIsImdlb3NpdGU6bWFpbHJ1IiwiZ2Vvc2l0ZTptYWlscnUtZ3JvdXAiLCJkb21haW46d2JzdGF0aWMubmV0IiwiZG9tYWluOndiY2RuLnJ1IiwiZG9tYWluOmJpdHJpeC5pbmZvIl0sIkRpcmVjdElwIjpbImdlb2lwOnByaXZhdGUiLCJnZW9pcDpydSJdLCJQcm94eVNpdGVzIjpbXSwiUHJveHlJcCI6W10sIkJsb2NrU2l0ZXMiOltdLCJCbG9ja0lwIjpbXSwiRG9tYWluU3RyYXRlZ3kiOiJJUElmTm9uTWF0Y2giLCJGYWtlRE5TIjpmYWxzZSwiVXNlQ2h1bmtGaWxlcyI6dHJ1ZX0=
+          <button class="copy-btn" onclick="copyCode(this, 'routing-code')">Копировать</button>
+        </div>
+
+        <div class="img-group">
+          <div class="img-wrap">
+            <img src="https://img4.teletype.in/files/78/0a/780a877b-0c0c-4d02-8b83-1308a8a5086d.png" alt="Импорт профиля">
+          </div>
+          <div class="img-wrap">
+            <img src="https://img4.teletype.in/files/39/1f/391f82ed-9d1b-4214-9c71-fe50f4002737.png" alt="Профиль Russia активен">
+          </div>
+        </div>
+
+        <p>После добавления подождите ~5 секунд — профиль <strong>«Russia»</strong> и пункт <strong>«Использовать роутинг»</strong> должны включиться автоматически. Если этого не произошло, активируйте их вручную.</p>
+
+        <div class="result">
+          <div class="result-title">✅ Готово</div>
+          <ul>
+            <li>🇷🇺 Российские сайты → напрямую (через вашу домашнюю или мобильную сеть)</li>
+            <li>🌍 Остальные сервисы → через VPN</li>
+          </ul>
+        </div>
+
+        <div class="note">
+          <strong>Не забудьте перезапустить подключение к VPN.</strong>
+        </div>
+
+        <div class="note">
+          Если правила маршрутизации мешают работе каких-либо сайтов, вы можете отключить их — переключите ползунок <strong>«Использовать роутинг»</strong> в неактивное положение.
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /steps -->
+
+  <hr>
+
+  <div class="support">
+    Если у вас что-то не работает или нужна помощь с добавлением сайтов в исключения маршрутизации, напишите в канал <a href="https://t.me/+25UVdLn0QHUxOTJi">Aether INFO</a> — через значок в виде сообщения в левом нижнем углу экрана.
+  </div>
+
+</div>
+
+<script>
+function copyCode(btn, id) {
+  const el = document.getElementById(id);
+  const text = el.childNodes[0].textContent.trim();
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓ Скопировано';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = 'Копировать';
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+</script>
+</body>
+</html>
