@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Настройка HAPP на телефоне — Aether VPN</title>
+<title>Настройка HAPP — Aether VPN</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -31,7 +31,6 @@
     min-height: 100vh;
   }
 
-  /* Subtle grid background */
   body::before {
     content: '';
     position: fixed;
@@ -53,10 +52,6 @@
   }
 
   /* Header */
-  .header {
-    margin-bottom: 48px;
-  }
-
   .badge {
     display: inline-flex;
     align-items: center;
@@ -99,40 +94,63 @@
   .subtitle {
     color: var(--muted);
     font-size: 15px;
+    margin-bottom: 28px;
   }
 
-  .platform-tags {
+  /* Tab switcher */
+  .tabs {
     display: flex;
     gap: 8px;
-    margin-top: 16px;
-    flex-wrap: wrap;
+    margin-bottom: 40px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 6px;
   }
 
-  .tag {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    padding: 4px 12px;
-    border-radius: 6px;
-    font-size: 13px;
+  .tab-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
     color: var(--muted);
+    font-family: 'Onest', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .tab-btn:hover {
+    color: var(--text);
+    background: var(--surface2);
+  }
+
+  .tab-btn.active {
+    background: linear-gradient(135deg, var(--accent), #5b4fcf);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(124,106,247,0.35);
+  }
+
+  /* Pages */
+  .page { display: none; }
+  .page.active {
+    display: block;
+    animation: fadeUp 0.3s ease forwards;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   /* Steps */
-  .step {
-    margin-bottom: 40px;
-    opacity: 0;
-    transform: translateY(16px);
-    animation: fadeUp 0.5s ease forwards;
-  }
-
-  .step:nth-child(1) { animation-delay: 0.1s; }
-  .step:nth-child(2) { animation-delay: 0.2s; }
-  .step:nth-child(3) { animation-delay: 0.3s; }
-  .step:nth-child(4) { animation-delay: 0.4s; }
-
-  @keyframes fadeUp {
-    to { opacity: 1; transform: translateY(0); }
-  }
+  .step { margin-bottom: 40px; }
 
   .step-header {
     display: flex;
@@ -162,9 +180,7 @@
     letter-spacing: -0.01em;
   }
 
-  .step-body {
-    padding-left: 46px;
-  }
+  .step-body { padding-left: 46px; }
 
   /* Download buttons */
   .dl-row {
@@ -197,9 +213,18 @@
     box-shadow: 0 4px 20px rgba(124,106,247,0.2);
   }
 
-  .dl-btn svg { flex-shrink: 0; }
+  .dl-btn.primary {
+    background: linear-gradient(135deg, rgba(124,106,247,0.2), rgba(91,79,207,0.2));
+    border-color: rgba(124,106,247,0.4);
+    color: #c4bbff;
+  }
 
-  /* List items */
+  .dl-btn.primary:hover {
+    background: linear-gradient(135deg, rgba(124,106,247,0.3), rgba(91,79,207,0.3));
+    color: #fff;
+  }
+
+  /* Lists */
   ul {
     list-style: none;
     display: flex;
@@ -229,6 +254,38 @@
     top: 11px;
     font-size: 13px;
     line-height: 1;
+  }
+
+  ol {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+    counter-reset: ol-counter;
+  }
+
+  ol li {
+    counter-increment: ol-counter;
+    padding-left: 36px;
+  }
+
+  ol li::before {
+    content: counter(ol-counter);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    position: absolute;
+    left: 8px;
+    top: 9px;
   }
 
   p { margin-bottom: 12px; font-size: 15px; }
@@ -262,11 +319,14 @@
   .img-group .img-wrap {
     flex: 1;
     min-width: 160px;
+    margin: 0;
   }
 
   .img-group .img-wrap img {
     width: 100%;
     height: auto;
+    max-height: 360px;
+    object-fit: contain;
   }
 
   /* Code block */
@@ -276,6 +336,7 @@
     border-left: 3px solid var(--accent);
     border-radius: 10px;
     padding: 14px 16px;
+    padding-right: 90px;
     font-family: 'JetBrains Mono', monospace;
     font-size: 11.5px;
     color: var(--accent2);
@@ -297,6 +358,7 @@
     border-radius: 6px;
     cursor: pointer;
     transition: all 0.2s;
+    white-space: nowrap;
   }
 
   .copy-btn:hover { color: #fff; border-color: var(--accent); }
@@ -317,6 +379,7 @@
     font-weight: 500;
     margin: 12px 0;
     transition: all 0.2s;
+    word-break: break-all;
   }
 
   .import-link:hover {
@@ -324,7 +387,7 @@
     transform: translateY(-1px);
   }
 
-  /* Note / blockquote */
+  /* Note */
   .note {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -337,6 +400,19 @@
   }
 
   .note strong { color: var(--text); }
+
+  /* Tip / info block */
+  .tip {
+    background: rgba(79,195,247,0.06);
+    border: 1px solid rgba(79,195,247,0.2);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 14px;
+    color: var(--muted);
+    margin: 16px 0;
+  }
+
+  .tip strong { color: var(--accent2); }
 
   /* Result block */
   .result {
@@ -352,17 +428,9 @@
     color: var(--success);
     font-size: 15px;
     margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
   }
 
-  .result ul {
-    background: none;
-    border: none;
-    padding: 0;
-    gap: 6px;
-  }
+  .result ul { margin-bottom: 0; }
 
   .result li {
     background: rgba(255,255,255,0.03);
@@ -370,7 +438,29 @@
     font-size: 14px;
   }
 
-  /* Divider */
+  /* Section separator */
+  .section-sep {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 36px 0 28px;
+  }
+
+  .section-sep-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .section-sep-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
   hr {
     border: none;
     border-top: 1px solid var(--border);
@@ -388,11 +478,7 @@
     color: var(--muted);
   }
 
-  .support a {
-    color: var(--accent);
-    text-decoration: none;
-  }
-
+  .support a { color: var(--accent); text-decoration: none; }
   .support a:hover { text-decoration: underline; }
 
   strong { color: var(--text); font-weight: 500; }
@@ -400,26 +486,32 @@
   @media (max-width: 480px) {
     .wrap { padding: 32px 16px 60px; }
     .step-body { padding-left: 0; }
-    .step-header { align-items: flex-start; }
+    .tabs { flex-direction: column; }
   }
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <div class="header">
-    <div class="badge">Aether VPN</div>
-    <h1>Настройка HAPP<br>на телефоне</h1>
-    <p class="subtitle">Пошаговая инструкция по установке и настройке</p>
-    <div class="platform-tags">
-      <span class="tag">📱 iOS</span>
-      <span class="tag">🤖 Android</span>
-    </div>
+  <div class="badge">Aether VPN</div>
+  <h1>Настройка HAPP</h1>
+  <p class="subtitle">Выберите вашу платформу</p>
+
+  <!-- Tab switcher -->
+  <div class="tabs" role="tablist">
+    <button class="tab-btn active" onclick="switchTab('mobile', this)" role="tab">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18.01"/></svg>
+      iOS / Android
+    </button>
+    <button class="tab-btn" onclick="switchTab('pc', this)" role="tab">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><polyline points="8 21 12 17 16 21"/></svg>
+      Windows / Mac
+    </button>
   </div>
 
-  <div class="steps">
+  <!-- ======================== MOBILE PAGE ======================== -->
+  <div id="page-mobile" class="page active">
 
-    <!-- Step 1 -->
     <div class="step">
       <div class="step-header">
         <div class="step-num">1</div>
@@ -437,12 +529,11 @@
           </a>
         </div>
         <div class="img-wrap">
-          <img src="https://img4.teletype.in/files/3c/95/3c95ec37-c102-4855-966b-16969adbdd41.png" alt="HAPP App Store">
+          <img src="https://img4.teletype.in/files/3c/95/3c95ec37-c102-4855-966b-16969adbdd41.png" alt="HAPP в App Store">
         </div>
       </div>
     </div>
 
-    <!-- Step 2 -->
     <div class="step">
       <div class="step-header">
         <div class="step-num">2</div>
@@ -466,7 +557,6 @@
       </div>
     </div>
 
-    <!-- Step 3 -->
     <div class="step">
       <div class="step-header">
         <div class="step-num">3</div>
@@ -483,7 +573,6 @@
       </div>
     </div>
 
-    <!-- Step 4 -->
     <div class="step">
       <div class="step-header">
         <div class="step-num">4</div>
@@ -497,19 +586,10 @@
         <div class="img-wrap">
           <img src="https://img3.teletype.in/files/e8/c2/e8c2ae59-80a6-4340-9ffc-f0a75dab25db.png" alt="Маршрутизация">
         </div>
-
-        <p>Нажмите на кнопку ниже, чтобы автоматически добавить профиль маршрутизации:</p>
-
-        <a class="import-link" href="happ://routing/onadd/eyJOYW1lIjoiUnVzc2lh8J+Ht/Cfh7oiLCJHbG9iYWxQcm94eSI6dHJ1ZSwiUm91dGVPcmRlciI6ImRpcmVjdC1ibG9jay1wcm94eSIsIlJlbW90ZUROU1R5cGUiOiJEb1UiLCJSZW1vdGVETlNEb21haW4iOiJodHRwczovL2Nsb3VkZmxhcmUtZG5zLmNvbS9kbnMtcXVlcnkiLCJSZW1vdGVETlNJUCI6IjEuMS4xLjEiLCJEb21lc3RpY0ROU1R5cGUiOiJEb1UiLCJEb21lc3RpY0ROU0RvbWFpbiI6Imh0dHBzOi8vZG5zLmdvb2dsZS9kbnMtcXVlcnkiLCJEb21lc3RpY0ROU0lQIjoiNzcuODguOC44IiwiR2VvaXB1cmwiOiJodHRwczovL2dpdGh1Yi5jb20vTG95YWxzb2xkaWVyL3YycmF5LXJ1bGVzLWRhdC9yZWxlYXNlcy9sYXRlc3QvZG93bmxvYWQvZ2VvaXAuZGF0IiwiR2Vvc2l0ZXVybCI6Imh0dHBzOi8vZ2l0aHViLmNvbS9Mb3lhbHNvbGRpZXIvdjJyYXktcnVsZXMtZGF0L3JlbGVhc2VzL2xhdGVzdC9kb3dubG9hZC9nZW9zaXRlLmRhdCIsIkxhc3RVcGRhdGVkIjoiMTc3NDA0MjMzMyIsIkRuc0hvc3RzIjp7fSwiRGlyZWN0U2l0ZXMiOlsiZ2Vvc2l0ZTpwcml2YXRlIiwiZ2Vvc2l0ZTpjYXRlZ29yeS1ydSIsImdlb3NpdGU6Y2F0ZWdvcnktZ292LXJ1IiwiZ2Vvc2l0ZTpjYXRlZ29yeS1iYW5rLXJ1IiwiZ2Vvc2l0ZTpjYXRlZ29yeS1tZWRpYS1ydSIsImdlb3NpdGU6Y2F0ZWdvcnktcmV0YWlsLXJ1IiwiZ2Vvc2l0ZTpjYXRlZ29yeS1lY29tbWVyY2UtcnUiLCJnZW9zaXRlOmNhdGVnb3J5LWVudGVydGFpbm1lbnQtcnUiLCJnZW9zaXRlOmNhdGVnb3J5LXRyYXZlbC1ydSIsImdlb3NpdGU6eWFuZGV4IiwiZ2Vvc2l0ZTp2ayIsImdlb3NpdGU6bWFpbHJ1IiwiZ2Vvc2l0ZTptYWlscnUtZ3JvdXAiLCJkb21haW46d2JzdGF0aWMubmV0IiwiZG9tYWluOndiY2RuLnJ1IiwiZG9tYWluOmJpdHJpeC5pbmZvIl0sIkRpcmVjdElwIjpbImdlb2lwOnByaXZhdGUiLCJnZW9pcDpydSJdLCJQcm94eVNpdGVzIjpbXSwiUHJveHlJcCI6W10sIkJsb2NrU2l0ZXMiOltdLCJCbG9ja0lwIjpbXSwiRG9tYWluU3RyYXRlZ3kiOiJJUElmTm9uTWF0Y2giLCJGYWtlRE5TIjpmYWxzZSwiVXNlQ2h1bmtGaWxlcyI6dHJ1ZX0=">
-          ✦ Добавить профиль «Russia»
-        </a>
-
+        <p>Нажмите на кнопку ниже, чтобы автоматически добавить профиль:</p>
+        <a class="import-link" href="happ://routing/onadd/eyJOYW1lIjoiUnVzc2lh8J+Ht/Cfh7oiLCJHbG9iYWxQcm94eSI6dHJ1ZSwiUm91dGVPcmRlciI6ImRpcmVjdC1ibG9jay1wcm94eSIsIlJlbW90ZUROU1R5cGUiOiJEb1UiLCJSZW1vdGVETlNEb21haW4iOiJodHRwczovL2Nsb3VkZmxhcmUtZG5zLmNvbS9kbnMtcXVlcnkiLCJSZW1vdGVETlNJUCI6IjEuMS4xLjEiLCJEb21lc3RpY0ROU1R5cGUiOiJEb1UiLCJEb21lc3RpY0ROU0RvbWFpbiI6Imh0dHBzOi8vZG5zLmdvb2dsZS9kbnMtcXVlcnkiLCJEb21lc3RpY0ROU0lQIjoiNzcuODguOC44IiwiR2VvaXB1cmwiOiJodHRwczovL2dpdGh1Yi5jb20vTG95YWxzb2xkaWVyL3YycmF5LXJ1bGVzLWRhdC9yZWxlYXNlcy9sYXRlc3QvZG93bmxvYWQvZ2VvaXAuZGF0IiwiR2Vvc2l0ZXVybCI6Imh0dHBzOi8vZ2l0aHViLmNvbS9Mb3lhbHNvbGRpZXIvdjJyYXktcnVsZXMtZGF0L3JlbGVhc2VzL2xhdGVzdC9kb3dubG9hZC9nZW9zaXRlLmRhdCIsIkxhc3RVcGRhdGVkIjoiMTc3NDA0MjMzMyIsIkRuc0hvc3RzIjp7fSwiRGlyZWN0U2l0ZXMiOlsiZ2Vvc2l0ZTpwcml2YXRlIiwiZ2Vvc2l0ZTpjYXRlZ29yeS1ydSIsImdlb3NpdGU6Y2F0ZWdvcnktZ292LXJ1IiwiZ2Vvc2l0ZTpjYXRlZ29yeS1iYW5rLXJ1IiwiZ2Vvc2l0ZTpjYXRlZ29yeS1tZWRpYS1ydSIsImdlb3NpdGU6Y2F0ZWdvcnktcmV0YWlsLXJ1IiwiZ2Vvc2l0ZTpjYXRlZ29yeS1lY29tbWVyY2UtcnUiLCJnZW9zaXRlOmNhdGVnb3J5LWVudGVydGFpbm1lbnQtcnUiLCJnZW9zaXRlOmNhdGVnb3J5LXRyYXZlbC1ydSIsImdlb3NpdGU6eWFuZGV4IiwiZ2Vvc2l0ZTp2ayIsImdlb3NpdGU6bWFpbHJ1IiwiZ2Vvc2l0ZTptYWlscnUtZ3JvdXAiLCJkb21haW46d2JzdGF0aWMubmV0IiwiZG9tYWluOndiY2RuLnJ1IiwiZG9tYWluOmJpdHJpeC5pbmZvIl0sIkRpcmVjdElwIjpbImdlb2lwOnByaXZhdGUiLCJnZW9pcDpydSJdLCJQcm94eVNpdGVzIjpbXSwiUHJveHlJcCI6W10sIkJsb2NrU2l0ZXMiOltdLCJCbG9ja0lwIjpbXSwiRG9tYWluU3RyYXRlZ3kiOiJJUElmTm9uTWF0Y2giLCJGYWtlRE5TIjpmYWxzZSwiVXNlQ2h1bmtGaWxlcyI6dHJ1ZX0=">✦ Добавить профиль «Russia»</a>
         <p style="margin-top:16px">Или скопируйте ссылку вручную и нажмите <strong>три точки</strong> → <strong>«Импорт профиля»</strong>:</p>
-
-        <div class="code-block" id="routing-code">happ://routing/onadd/eyJOYW1lIjoiUnVzc2lh8J+Ht/Cfh7oiLCJHbG9iYWxQcm94eSI6dHJ1ZSwiUm91dGVPcmRlciI6ImRpcmVjdC1ibG9jay1wcm94eSIsIlJlbW90ZUROU1R5cGUiOiJEb1UiLCJSZW1vdGVETlNEb21haW4iOiJodHRwczovL2Nsb3VkZmxhcmUtZG5zLmNvbS9kbnMtcXVlcnkiLCJSZW1vdGVETlNJUCI6IjEuMS4xLjEiLCJEb21lc3RpY0ROU1R5cGUiOiJEb1UiLCJEb21lc3RpY0ROU0RvbWFpbiI6Imh0dHBzOi8vZG5zLmdvb2dsZS9kbnMtcXVlcnkiLCJEb21lc3RpY0ROU0lQIjoiNzcuODguOC44IiwiR2VvaXB1cmwiOiJodHRwczovL2dpdGh1Yi5jb20vTG95YWxzb2xkaWVyL3YycmF5LXJ1bGVzLWRhdC9yZWxlYXNlcy9sYXRlc3QvZG93bmxvYWQvZ2VvaXAuZGF0IiwiR2Vvc2l0ZXVybCI6Imh0dHBzOi8vZ2l0aHViLmNvbS9Mb3lhbHNvbGRpZXIvdjJyYXktcnVsZXMtZGF0L3JlbGVhc2VzL2xhdGVzdC9kb3dubG9hZC9nZW9zaXRlLmRhdCIsIkxhc3RVcGRhdGVkIjoiMTc3NDA0MjMzMyIsIkRuc0hvc3RzIjp7fSwiRGlyZWN0U2l0ZXMiOlsiZ2Vvc2l0ZTpwcml2YXRlIiwiZ2Vvc2l0ZTpjYXRlZ29yeS1ydSIsImdlb3NpdGU6Y2F0ZWdvcnktZ292LXJ1IiwiZ2Vvc2l0ZTpjYXRlZ29yeS1iYW5rLXJ1IiwiZ2Vvc2l0ZTpjYXRlZ29yeS1tZWRpYS1ydSIsImdlb3NpdGU6Y2F0ZWdvcnktcmV0YWlsLXJ1IiwiZ2Vvc2l0ZTpjYXRlZ29yeS1lY29tbWVyY2UtcnUiLCJnZW9zaXRlOmNhdGVnb3J5LWVudGVydGFpbm1lbnQtcnUiLCJnZW9zaXRlOmNhdGVnb3J5LXRyYXZlbC1ydSIsImdlb3NpdGU6eWFuZGV4IiwiZ2Vvc2l0ZTp2ayIsImdlb3NpdGU6bWFpbHJ1IiwiZ2Vvc2l0ZTptYWlscnUtZ3JvdXAiLCJkb21haW46d2JzdGF0aWMubmV0IiwiZG9tYWluOndiY2RuLnJ1IiwiZG9tYWluOmJpdHJpeC5pbmZvIl0sIkRpcmVjdElwIjpbImdlb2lwOnByaXZhdGUiLCJnZW9pcDpydSJdLCJQcm94eVNpdGVzIjpbXSwiUHJveHlJcCI6W10sIkJsb2NrU2l0ZXMiOltdLCJCbG9ja0lwIjpbXSwiRG9tYWluU3RyYXRlZ3kiOiJJUElmTm9uTWF0Y2giLCJGYWtlRE5TIjpmYWxzZSwiVXNlQ2h1bmtGaWxlcyI6dHJ1ZX0=
-          <button class="copy-btn" onclick="copyCode(this, 'routing-code')">Копировать</button>
-        </div>
-
+        <div class="code-block" id="m-routing">happ://routing/onadd/eyJOYW1lIjoiUnVzc2lh8J+Ht/Cfh7oiLCJHbG9iYWxQcm94eSI6dHJ1ZSwiUm91dGVPcmRlciI6ImRpcmVjdC1ibG9jay1wcm94eSIsIlJlbW90ZUROU1R5cGUiOiJEb1UiLCJSZW1vdGVETlNEb21haW4iOiJodHRwczovL2Nsb3VkZmxhcmUtZG5zLmNvbS9kbnMtcXVlcnkiLCJSZW1vdGVETlNJUCI6IjEuMS4xLjEiLCJEb21lc3RpY0ROU1R5cGUiOiJEb1UiLCJEb21lc3RpY0ROU0RvbWFpbiI6Imh0dHBzOi8vZG5zLmdvb2dsZS9kbnMtcXVlcnkiLCJEb21lc3RpY0ROU0lQIjoiNzcuODguOC44IiwiR2VvaXB1cmwiOiJodHRwczovL2dpdGh1Yi5jb20vTG95YWxzb2xkaWVyL3YycmF5LXJ1bGVzLWRhdC9yZWxlYXNlcy9sYXRlc3QvZG93bmxvYWQvZ2VvaXAuZGF0IiwiR2Vvc2l0ZXVybCI6Imh0dHBzOi8vZ2l0aHViLmNvbS9Mb3lhbHNvbGRpZXIvdjJyYXktcnVsZXMtZGF0L3JlbGVhc2VzL2xhdGVzdC9kb3dubG9hZC9nZW9zaXRlLmRhdCIsIkxhc3RVcGRhdGVkIjoiMTc3NDA0MjMzMyIsIkRuc0hvc3RzIjp7fSwiRGlyZWN0U2l0ZXMiOlsiZ2Vvc2l0ZTpwcml2YXRlIiwiZ2Vvc2l0ZTpjYXRlZ29yeS1ydSIsImdlb3NpdGU6Y2F0ZWdvcnktZ292LXJ1IiwiZ2Vvc2l0ZTpjYXRlZ29yeS1iYW5rLXJ1IiwiZ2Vvc2l0ZTpjYXRlZ29yeS1tZWRpYS1ydSIsImdlb3NpdGU6Y2F0ZWdvcnktcmV0YWlsLXJ1IiwiZ2Vvc2l0ZTpjYXRlZ29yeS1lY29tbWVyY2UtcnUiLCJnZW9zaXRlOmNhdGVnb3J5LWVudGVydGFpbm1lbnQtcnUiLCJnZW9zaXRlOmNhdGVnb3J5LXRyYXZlbC1ydSIsImdlb3NpdGU6eWFuZGV4IiwiZ2Vvc2l0ZTp2ayIsImdlb3NpdGU6bWFpbHJ1IiwiZ2Vvc2l0ZTptYWlscnUtZ3JvdXAiLCJkb21haW46d2JzdGF0aWMubmV0IiwiZG9tYWluOndiY2RuLnJ1IiwiZG9tYWluOmJpdHJpeC5pbmZvIl0sIkRpcmVjdElwIjpbImdlb2lwOnByaXZhdGUiLCJnZW9pcDpydSJdLCJQcm94eVNpdGVzIjpbXSwiUHJveHlJcCI6W10sIkJsb2NrU2l0ZXMiOltdLCJCbG9ja0lwIjpbXSwiRG9tYWluU3RyYXRlZ3kiOiJJUElmTm9uTWF0Y2giLCJGYWtlRE5TIjpmYWxzZSwiVXNlQ2h1bmtGaWxlcyI6dHJ1ZX0=<button class="copy-btn" onclick="copyCode(this,'m-routing')">Копировать</button></div>
         <div class="img-group">
           <div class="img-wrap">
             <img src="https://img4.teletype.in/files/78/0a/780a877b-0c0c-4d02-8b83-1308a8a5086d.png" alt="Импорт профиля">
@@ -518,9 +598,7 @@
             <img src="https://img4.teletype.in/files/39/1f/391f82ed-9d1b-4214-9c71-fe50f4002737.png" alt="Профиль Russia активен">
           </div>
         </div>
-
-        <p>После добавления подождите ~5 секунд — профиль <strong>«Russia»</strong> и пункт <strong>«Использовать роутинг»</strong> должны включиться автоматически. Если этого не произошло, активируйте их вручную.</p>
-
+        <p>После добавления подождите ~5 секунд — профиль <strong>«Russia»</strong> и пункт <strong>«Использовать роутинг»</strong> должны включиться автоматически. Если этого не произошло, активируйте вручную.</p>
         <div class="result">
           <div class="result-title">✅ Готово</div>
           <ul>
@@ -528,28 +606,168 @@
             <li>🌍 Остальные сервисы → через VPN</li>
           </ul>
         </div>
+        <div class="note"><strong>Не забудьте перезапустить подключение к VPN.</strong></div>
+        <div class="note">Если правила маршрутизации мешают работе каких-либо сайтов, переключите ползунок <strong>«Использовать роутинг»</strong> в неактивное положение.</div>
+      </div>
+    </div>
 
-        <div class="note">
-          <strong>Не забудьте перезапустить подключение к VPN.</strong>
+    <hr>
+    <div class="support">
+      Если у вас что-то не работает или нужна помощь с добавлением сайтов в исключения маршрутизации, напишите в канал <a href="https://t.me/+25UVdLn0QHUxOTJi">Aether INFO</a> — через значок в виде сообщения в левом нижнем углу экрана.
+    </div>
+
+  </div><!-- /page-mobile -->
+
+
+  <!-- ======================== PC PAGE ======================== -->
+  <div id="page-pc" class="page">
+
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">1</div>
+        <h2>Загрузка и установка</h2>
+      </div>
+      <div class="step-body">
+        <div class="dl-row">
+          <a class="dl-btn primary" href="https://www.happ.su/main/ru" target="_blank">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Сайт HAPP
+          </a>
+          <a class="dl-btn" href="https://github.com/Happ-proxy/happ-desktop/releases/latest/download/setup-Happ.x64.exe" target="_blank">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Прямая ссылка Windows x64
+          </a>
         </div>
+        <div class="img-wrap">
+          <img src="https://img4.teletype.in/files/38/0a/380a0d26-369d-4d2e-a64a-aebcfa6f5811.png" alt="Сайт HAPP">
+        </div>
+        <ol>
+          <li>Скачайте установщик под вашу ОС</li>
+          <li>Запустите установщик</li>
+          <li>Все параметры оставляем по умолчанию</li>
+          <li>После установки запускаем программу</li>
+        </ol>
+      </div>
+    </div>
 
-        <div class="note">
-          Если правила маршрутизации мешают работе каких-либо сайтов, вы можете отключить их — переключите ползунок <strong>«Использовать роутинг»</strong> в неактивное положение.
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">2</div>
+        <h2>Добавление подписки</h2>
+      </div>
+      <div class="step-body">
+        <ol>
+          <li>Получите подписку в боте <strong>@Aether_net_bot</strong></li>
+          <li>Скопируйте подписку в буфер обмена</li>
+          <li>Откройте приложение HAPP и нажмите <strong>Ctrl + V</strong></li>
+        </ol>
+        <div class="img-wrap">
+          <img src="https://img4.teletype.in/files/7b/e0/7be0ef22-b911-45cc-89d7-5267a4a70866.png" alt="Вставка подписки">
+        </div>
+        <p>После добавления подписки откроется главное меню.</p>
+        <div class="img-wrap">
+          <img src="https://img4.teletype.in/files/fa/0a/fa0a2a33-1a17-44aa-bf97-3d33f035169a.jpeg" alt="Главное меню HAPP">
+        </div>
+        <p>Включите режим <strong>Proxy</strong> и нажмите на кнопку включения.</p>
+        <div class="tip">
+          Зайдите в настройки (шестерёнка в левом меню) и измените <strong>«Предпочитаемый тип IP»</strong> на <strong>«IPv4»</strong>. Там же можно включить автозапуск при старте системы — раздел <strong>«Дополнительные настройки»</strong>.
+        </div>
+        <div class="img-wrap">
+          <img src="https://img1.teletype.in/files/4b/de/4bdea2c0-8c5d-473b-bddf-0c02e3cdc0cc.png" alt="Настройки HAPP">
+        </div>
+        <div class="result">
+          <div class="result-title">✅ VPN уже работает</div>
+          <p style="font-size:14px;color:var(--muted);margin:0">Но рекомендуем дополнительно настроить маршрутизацию ниже.</p>
         </div>
       </div>
     </div>
 
-  </div><!-- /steps -->
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">3</div>
+        <h2>Маршрутизация для российских сайтов</h2>
+      </div>
+      <div class="step-body">
+        <p>Чтобы VPN не влиял на российские сайты (RU, VK, банки и т.д.).</p>
+        <p>Скопируйте ссылку ниже и откройте её в браузере, либо добавьте через меню приложения — кнопка <strong>«Импорт из буфера»</strong>:</p>
+        <div class="code-block" id="pc-routing">happ://routing/onadd/eyJOYW1lIjoiUnVzc2lh8J+Ht/Cfh7oiLCJHbG9iYWxQcm94eSI6dHJ1ZSwiUm91dGVPcmRlciI6ImRpcmVjdC1ibG9jay1wcm94eSIsIlJlbW90ZUROU1R5cGUiOiJEb1UiLCJSZW1vdGVETlNEb21haW4iOiJodHRwczovL2Nsb3VkZmxhcmUtZG5zLmNvbS9kbnMtcXVlcnkiLCJSZW1vdGVETlNJUCI6IjEuMS4xLjEiLCJEb21lc3RpY0ROU1R5cGUiOiJEb1UiLCJEb21lc3RpY0ROU0RvbWFpbiI6Imh0dHBzOi8vZG5zLmdvb2dsZS9kbnMtcXVlcnkiLCJEb21lc3RpY0ROU0lQIjoiNzcuODguOC44IiwiR2VvaXB1cmwiOiJodHRwczovL2dpdGh1Yi5jb20vTG95YWxzb2xkaWVyL3YycmF5LXJ1bGVzLWRhdC9yZWxlYXNlcy9sYXRlc3QvZG93bmxvYWQvZ2VvaXAuZGF0IiwiR2Vvc2l0ZXVybCI6Imh0dHBzOi8vZ2l0aHViLmNvbS9Mb3lhbHNvbGRpZXIvdjJyYXktcnVsZXMtZGF0L3JlbGVhc2VzL2xhdGVzdC9kb3dubG9hZC9nZW9zaXRlLmRhdCIsIkxhc3RVcGRhdGVkIjoiMTc3NDA0MjMzMyIsIkRuc0hvc3RzIjp7fSwiRGlyZWN0U2l0ZXMiOlsiZ2Vvc2l0ZTpwcml2YXRlIiwiZ2Vvc2l0ZTpjYXRlZ29yeS1ydSIsImdlb3NpdGU6Y2F0ZWdvcnktZ292LXJ1IiwiZ2Vvc2l0ZTpjYXRlZ29yeS1iYW5rLXJ1IiwiZ2Vvc2l0ZTpjYXRlZ29yeS1tZWRpYS1ydSIsImdlb3NpdGU6Y2F0ZWdvcnktcmV0YWlsLXJ1IiwiZ2Vvc2l0ZTpjYXRlZ29yeS1lY29tbWVyY2UtcnUiLCJnZW9zaXRlOmNhdGVnb3J5LWVudGVydGFpbm1lbnQtcnUiLCJnZW9zaXRlOmNhdGVnb3J5LXRyYXZlbC1ydSIsImdlb3NpdGU6eWFuZGV4IiwiZ2Vvc2l0ZTp2ayIsImdlb3NpdGU6bWFpbHJ1IiwiZ2Vvc2l0ZTptYWlscnUtZ3JvdXAiLCJkb21haW46d2JzdGF0aWMubmV0IiwiZG9tYWluOndiY2RuLnJ1IiwiZG9tYWluOmJpdHJpeC5pbmZvIl0sIkRpcmVjdElwIjpbImdlb2lwOnByaXZhdGUiLCJnZW9pcDpydSJdLCJQcm94eVNpdGVzIjpbXSwiUHJveHlJcCI6W10sIkJsb2NrU2l0ZXMiOltdLCJCbG9ja0lwIjpbXSwiRG9tYWluU3RyYXRlZ3kiOiJJUElmTm9uTWF0Y2giLCJGYWtlRE5TIjpmYWxzZSwiVXNlQ2h1bmtGaWxlcyI6dHJ1ZX0=<button class="copy-btn" onclick="copyCode(this,'pc-routing')">Копировать</button></div>
+        <div class="img-wrap">
+          <img src="https://img2.teletype.in/files/1e/89/1e89a59f-30ff-43d3-a959-ed4c5383478f.jpeg" alt="Импорт профиля маршрутизации">
+        </div>
+        <p>Убедитесь, что ползунок в активном положении, затем запустите VPN (или перезапустите, если он уже был активен).</p>
+        <div class="img-wrap">
+          <img src="https://img1.teletype.in/files/c7/49/c74949eb-c85c-4ce0-9161-aa78dc379b73.jpeg" alt="Маршрутизация активна">
+        </div>
+        <div class="result">
+          <div class="result-title">✅ Готово</div>
+          <ul>
+            <li>🇷🇺 Российские сайты → напрямую (через вашу домашнюю сеть)</li>
+            <li>🌍 Остальные сервисы → через VPN</li>
+          </ul>
+        </div>
+      </div>
+    </div>
 
-  <hr>
+    <div class="section-sep">
+      <div class="section-sep-line"></div>
+      <div class="section-sep-label">Дополнительно</div>
+      <div class="section-sep-line"></div>
+    </div>
 
-  <div class="support">
-    Если у вас что-то не работает или нужна помощь с добавлением сайтов в исключения маршрутизации, напишите в канал <a href="https://t.me/+25UVdLn0QHUxOTJi">Aether INFO</a> — через значок в виде сообщения в левом нижнем углу экрана.
-  </div>
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">+</div>
+        <h2>Прокси для Telegram</h2>
+      </div>
+      <div class="step-body">
+        <p>Если Telegram работает плохо — добавьте встроенный прокси, чтобы он шёл через VPN. Медиа и сообщения начнут загружаться нормально.</p>
+        <ol>
+          <li>Нажмите на ссылку <a href="https://t.me/socks?server=127.0.0.1&port=10808" style="color:var(--accent)">добавить прокси</a> или откройте её в Telegram</li>
+          <li>Включите появившийся прокси</li>
+        </ol>
+        <div class="img-wrap">
+          <img src="https://img3.teletype.in/files/6a/45/6a45888a-8578-4648-b930-7db6e2385d30.jpeg" alt="Прокси в Telegram">
+        </div>
+        <div class="note">
+          VPN на компьютере должен быть включён для работы прокси. Управлять прокси можно через значок в левом нижнем углу Telegram или через <strong>Настройки → Продвинутые настройки → Тип соединения</strong>.
+        </div>
+        <div class="img-wrap">
+          <img src="https://img4.teletype.in/files/3a/1d/3a1dc03d-7dfd-44fe-955b-14f3305e47d9.png" alt="Настройки Telegram прокси">
+        </div>
+      </div>
+    </div>
 
-</div>
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">+</div>
+        <h2>Режим TUN</h2>
+      </div>
+      <div class="step-body">
+        <p>Если нужно, чтобы VPN работал на все приложения в системе, в том числе игры — включите режим TUN в настройках HAPP. После этого перезапустите подключение.</p>
+        <div class="img-wrap">
+          <img src="https://img1.teletype.in/files/cb/6d/cb6db859-d04d-4654-9817-b42dd85a0b37.png" alt="Режим TUN">
+        </div>
+      </div>
+    </div>
+
+    <hr>
+    <div class="support">
+      Если у вас что-то не работает или нужна помощь с добавлением сайтов в исключения маршрутизации, напишите в канал <a href="https://t.me/+25UVdLn0QHUxOTJi">Aether INFO</a> — через значок в виде сообщения в левом нижнем углу экрана.
+    </div>
+
+  </div><!-- /page-pc -->
+
+</div><!-- /wrap -->
 
 <script>
+function switchTab(tab, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + tab).classList.add('active');
+  btn.classList.add('active');
+  history.replaceState(null, '', '#' + tab);
+}
+
 function copyCode(btn, id) {
   const el = document.getElementById(id);
   const text = el.childNodes[0].textContent.trim();
@@ -562,6 +780,15 @@ function copyCode(btn, id) {
     }, 2000);
   });
 }
+
+// Handle #hash on load
+(function() {
+  const hash = location.hash.replace('#', '');
+  if (hash === 'pc') {
+    const btn = document.querySelectorAll('.tab-btn')[1];
+    switchTab('pc', btn);
+  }
+})();
 </script>
 </body>
 </html>
