@@ -789,6 +789,25 @@ function copyCode(btn, id) {
     switchTab('pc', btn);
   }
 })();
+  // Overlay zoom
+      const overlay = document.createElement('div');
+      overlay.style.cssText = 'display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;align-items:center;justify-content:center;cursor:zoom-out;';
+      const overlayImg = document.createElement('img');
+      overlayImg.style.cssText = 'max-width:90vw;max-height:90vh;border-radius:8px;object-fit:contain;';
+      overlay.appendChild(overlayImg);
+      document.body.appendChild(overlay);
+
+      document.querySelectorAll('img').forEach(img => {
+        img.style.cursor = 'zoom-in';
+        img.addEventListener('click', () => {
+          overlayImg.src = img.src;
+          overlay.style.display = 'flex';
+        });
+      });
+
+      overlay.addEventListener('click', () => {
+        overlay.style.display = 'none';
+      });
 </script>
 </body>
 </html>
